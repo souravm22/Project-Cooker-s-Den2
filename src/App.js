@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './Components/style.css';
+import { lazy } from 'react';
+import Meal from './Components/Meal';
+import Recipe from './Components/Recipe';
+import {Route,Routes} from 'react-router-dom';
+import Categories from './Components/Categories';
+
+const LazyAbout = React.lazy(()=> import('./Components/About'))
+const LazyCategories = React.lazy(()=> import('./Components/Categories'))
+const LazyWhy = React.lazy(()=> import('./Components/Why'))
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+   <Routes>
+      <Route  path="/" element={<Meal/>}/>
+      <Route path="/Categories" element ={<React.Suspense fallback='...Loading'>
+          <LazyCategories/>
+        </React.Suspense>} />
+      <Route path="/About" element ={
+        <React.Suspense fallback='...Loading'>
+          <LazyAbout/>
+        </React.Suspense>
+      } />
+      <Route path="/Why" element ={<React.Suspense fallback='...Loading'>
+          <LazyWhy/>
+        </React.Suspense>} />
+
+
+      <Route exact path="/:recipeId" element={<Recipe/>}/>
+      </Routes>
+    </>
+  )
 }
 
 export default App;
